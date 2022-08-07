@@ -1,2 +1,2 @@
-# Econometria-Aplicad
+# Econometria-Aplicada
 Temas de econometria
