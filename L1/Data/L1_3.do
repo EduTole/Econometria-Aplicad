@@ -11,7 +11,7 @@ u "${Data}/BD_1.dta",clear
 sum r6 redad rexper rmujer reduca
 
 *Por percentiles 
-g pct = r6, nq(4) 
+xtile pct = r6, nq(4) 
 tabstat r6 reduca, stats(mean p5 p25 p50 p75 max min ) col(stats) 
 
 *Grafico
@@ -95,11 +95,11 @@ predict uhat,resid
 *del error y tets para nomalidad de la distribucion de errors
 kdensity uhat
 sktest uhat, noadj 
-graph export "${Imagen}/t1.png", replace
+graph export "${Out}/t1.png", replace
 
 *Grafico de caja
 graph box uhat
-graph export "${Imagen}/t2.png", replace
+graph export "${Out}/t2.png", replace
 
 *Pregunta 1c) prueba de errores de heterocedasticidad	
 *--------------------------------------------------------------
@@ -120,9 +120,9 @@ display lm_het
 *-------------------------------------------------------------
 *Pregunta 2a) prediccion de los errores
 eststo clear	
-reg lnr6 reduca 
-reg lnr6 reduca rmujer 
-reg lnr6 reduca rmujer rexper rexpersq rpareja rsoltero
+reg lnr6 reduca ,r
+reg lnr6 reduca rmujer ,r
+reg lnr6 reduca rmujer rexper rexpersq rpareja rsoltero,r
 	
 *Pregunta 2b) prediccion de los errores
 *Test de Wald: edad y edad cuadrado
@@ -142,6 +142,7 @@ matrix vb=e(V)
 
 matrix vage=vb[3..4,3..4]
 matrix list vage
+6
 nlcom - _b[rexper]/(2*_b[rexpersq]) - 50		
 gen lnr6_predicted=_b[rexper]*rexper +_b[rexpersq]*rexpersq
 scatter lnr6_predicted rexper		
